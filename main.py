@@ -8,4 +8,4 @@ for year_c in range(start_year, end_year):
     print("Start of year ", year_c, " balance: ", f"{balance:,.2f}")
     balance += annualContribution
     balance = balance * annualGrowth
-=
+
