@@ -25,3 +25,4 @@ for year_c in range(start_year, end_year):
     balance += annual_contribution
     balance = balance * annual_growth
 
+print("End balance: ", f"{balance:,.2f}")
