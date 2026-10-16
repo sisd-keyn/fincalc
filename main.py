@@ -2,6 +2,7 @@ starting_balance = float(input("Starting Balance: "))
 annual_contribution = float(input("Annual Contribution: "))
 annual_growth = float(input("Annual Growth: "))
 years = int(input("Years: "))
+inflation = float(input("Inflation: "))
 
 balance = starting_balance
 start_year = 2027
