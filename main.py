@@ -79,16 +79,22 @@ def calc_annual_growth(start_balance, end_balance, annual_contribution, years):
 
     return ((low + high) / 2.0) * 100.0
 
+def calc_years_from_age(current_year, birth_year, target_age):
+    years_until_target_age = target_age - (current_year - birth_year)
+    return years_until_target_age
+
 def main():
-    start_balance = 93467.14
-    annual_contribution = 10000
-    end_balance = 300000
+    start_balance = 50000
+    annual_contribution = 32000
+    end_balance = 100000/0.04
     annual_growth = 7
-    years = 9
 
-    x = calc_annual_growth(start_balance, end_balance, annual_contribution, years)
+    retirement_age = 52
+    years = calc_years_from_age(2026, 1995, retirement_age)
 
-    print("Annual Growth: ", f"{x:,.2f}")
+    x = calc_annual_contribution(start_balance, end_balance, annual_growth, years)
+
+    print("Annual Contribution: ", f"{x:,.2f}")
 
 if __name__ == "__main__":
     main()
