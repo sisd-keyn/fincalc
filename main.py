@@ -1,3 +1,15 @@
+def calc_start_balance(end_balance, annual_contribution, annual_growth, years):
+    r = annual_growth / 100.0
+    if r == 0:
+        return end_balance - annual_contribution * years
+
+    growth_factor = (1 + r) ** years
+    annuity_factor = (1 + r) * (growth_factor - 1) / r
+
+    start_balance = (end_balance - annual_contribution * annuity_factor) / growth_factor
+
+    return start_balance
+
 def calc_end_balance(start_balance, annual_contribution, annual_growth, years):
     start_year = 2027
     end_year = start_year + years
@@ -22,25 +34,61 @@ def calc_annual_contribution(start_balance, end_balance, annual_growth, years):
 
         return annual_contribution
 
-def main2():
-    starting_balance = float(input("Starting Balance: "))
-    annual_contribution = float(input("Annual Contribution: "))
-    annual_growth = float(input("Annual Growth: "))
-    years = int(input("Years: "))
+def calc_years(start_balance, end_balance, annual_contribution, annual_growth):
+    r = annual_growth / 100.0
+    if r == 0:
+        return (end_balance - start_balance) / annual_contribution
 
-    end_balance = calc_end_balance(starting_balance, annual_contribution, annual_growth, years)
+    years = 0
+    balance = start_balance
 
-    print("End balance: ", f"{end_balance:,.2f}")
+    while balance < end_balance:
+        balance += annual_contribution
+        balance = balance * (1 + r)
+        years += 1
+
+    return years
+
+def calc_annual_growth(start_balance, end_balance, annual_contribution, years):
+    if years <= 0:
+        return 0.0
+
+    # Binary search to solve for interest rate r numerically
+    low = -0.999
+    high = 10.0
+    max_iterations = 100
+    tolerance=1e-7
+
+    for _ in range(max_iterations):
+        mid = (low + high) / 2.0
+        
+        if abs(mid) < 1e-9:
+            predicted_eb = start_balance + annual_contribution * years
+        else:
+            gf = (1 + mid) ** years
+            af = (1 + mid) * (gf - 1) / mid
+            predicted_eb = start_balance * gf + annual_contribution * af
+
+        if abs(predicted_eb - end_balance) < tolerance:
+            return mid * 100.0
+
+        if predicted_eb < end_balance:
+            low = mid
+        else:
+            high = mid
+
+    return ((low + high) / 2.0) * 100.0
 
 def main():
-    start_balance = 0
-    end_balance = 1000
+    start_balance = 93467.14
+    annual_contribution = 10000
+    end_balance = 300000
     annual_growth = 7
-    years = 10
+    years = 9
 
-    ac = calc_annual_contribution(start_balance, end_balance, annual_growth, years)
+    x = calc_annual_growth(start_balance, end_balance, annual_contribution, years)
 
-    print("Annual Contribution: ", f"{ac:,.2f}")
+    print("Annual Growth: ", f"{x:,.2f}")
 
 if __name__ == "__main__":
     main()
